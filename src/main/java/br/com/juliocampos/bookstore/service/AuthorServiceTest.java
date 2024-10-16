@@ -20,11 +20,11 @@ import br.com.juliocampos.bookstore.repository.AuthorRepository;
 @ExtendWith(MockitoExtension.class)
 public class AuthorServiceTest {
 
-  @InjectMocks
-  private AuthorService authorService;
-
   @Mock
   private AuthorRepository authorRepository;
+
+  @InjectMocks
+  private AuthorService authorService;
 
   @Test
   public void testSave() {

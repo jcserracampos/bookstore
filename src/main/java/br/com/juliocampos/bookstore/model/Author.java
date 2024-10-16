@@ -3,7 +3,6 @@ package br.com.juliocampos.bookstore.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,9 +14,8 @@ public class Author {
 
   private String name;
 
-  // TODO: Implement Book entity
-  // @OneToMany(mappedBy = "author")
-  // private List<Book> books = new ArrayList<>();
+  @OneToMany(mappedBy = "author")
+  private List<Book> books = new ArrayList<>();
 
   // Getters and Setters
   public Long getId() {
@@ -36,11 +34,11 @@ public class Author {
     this.name = name;
   }
 
-  // public List<Book> getBooks() {
-  //   return books;
-  // }
+  public List<Book> getBooks() {
+    return books;
+  }
 
-  // public void setBooks(List<Book> books) {
-  //   this.books = books;
-  // }
+  public void setBooks(List<Book> books) {
+    this.books = books;
+  }
 }

@@ -11,7 +11,7 @@ import br.com.juliocampos.bookstore.model.Author;
 import br.com.juliocampos.bookstore.service.AuthorService;
 
 @RestController
-@RequestMapping("/authors")
+@RequestMapping("/api/authors")
 public class AuthorController {
 
   @Autowired
