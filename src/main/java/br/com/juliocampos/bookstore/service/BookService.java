@@ -16,29 +16,37 @@ public class BookService {
   private BookRepository bookRepository;
 
   /**
-   * @return
+   * Retrieve all books from the database
+   *
+   * @return List<Book>
    */
   public List<Book> findAll() {
     return bookRepository.findAll();
   }
 
   /**
+   * Retrieve a book by its id
+   *
    * @param id
-   * @return
+   * @return Optional<Book>
    */
   public Optional<Book> findById(Long id) {
     return bookRepository.findById(id);
   }
 
   /**
+   * Save a book to the database
+   *
    * @param book
-   * @return
+   * @return Book
    */
   public Book save(Book book) {
     return bookRepository.save(book);
   }
 
   /**
+   * Delete a book from the database
+   *
    * @param id
    */
   public void delete(Long id) {
