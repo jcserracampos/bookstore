@@ -9,4 +9,9 @@ FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
+
+# Criar um usuário não-root
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
