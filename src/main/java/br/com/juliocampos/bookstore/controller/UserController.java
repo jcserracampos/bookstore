@@ -15,10 +15,15 @@ public class UserController {
   private UserService userService;
 
   @PostMapping
-  public ResponseEntity<User> createUser(@RequestBody User user) {
+  public ResponseEntity<?> createUser(@RequestBody User user) {
     try {
       User createdUser = userService.createUser(user);
-      return ResponseEntity.ok(createdUser);
+      // Criando um novo objeto User sem a senha
+      User responseUser = new User();
+      responseUser.setId(createdUser.getId());
+      responseUser.setUsername(createdUser.getUsername());
+      // Adicione outros campos necessários, exceto a senha
+      return ResponseEntity.ok(responseUser);
     } catch (IllegalArgumentException e) {
       // 400 Bad Request para usuário já existente evitando exploração de vulnerabilidade de enumeração de usuários
       return ResponseEntity.badRequest().build();
