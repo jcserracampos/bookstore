@@ -19,7 +19,7 @@ import br.com.juliocampos.bookstore.service.UserDetailsServiceImpl;
 public class SecurityConfig {
 
   @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+  private UserDetailsServiceImpl userDetailsService;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,6 +27,7 @@ public class SecurityConfig {
       .authorizeHttpRequests(authz -> authz
         .requestMatchers("/api/authors/**").permitAll()
         .requestMatchers("/api/users").hasRole("ADMIN")
+        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
         .anyRequest().authenticated()
       )
       .httpBasic(withDefaults())
@@ -36,11 +37,11 @@ public class SecurityConfig {
 
   @Bean
   public PasswordEncoder passwordEncoder() {
-      return new BCryptPasswordEncoder();
+    return new BCryptPasswordEncoder();
   }
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-      auth.userDetailsService(userDetailsService);
+    auth.userDetailsService(userDetailsService);
   }
 }

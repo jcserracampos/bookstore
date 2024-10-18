@@ -7,14 +7,25 @@ import org.springframework.web.bind.annotation.*;
 import br.com.juliocampos.bookstore.model.User;
 import br.com.juliocampos.bookstore.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "User", description = "Endpoints para gerenciamento de usuários")
 public class UserController {
 
   @Autowired
   private UserService userService;
 
   @PostMapping
+  @Operation(summary = "Criar um novo usuário", description = "Cria um novo usuário com as informações fornecidas")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Usuário criado com sucesso"),
+    @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário já existente")
+  })
   public ResponseEntity<?> createUser(@RequestBody User user) {
     try {
       User createdUser = userService.createUser(user);
