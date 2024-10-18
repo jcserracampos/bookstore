@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import br.com.juliocampos.bookstore.model.Book;
 import br.com.juliocampos.bookstore.service.BookService;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/api/books")
@@ -36,6 +37,16 @@ public class BookController {
       return ResponseEntity.ok(savedBook);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("An error occurred: " + e.getMessage());
+    }
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Book> update(@PathVariable Long id, @RequestBody Book bookDetails) {
+    try {
+      Book updatedBook = bookService.update(id, bookDetails);
+      return ResponseEntity.ok(updatedBook);
+    } catch (EntityNotFoundException e) {
+      return ResponseEntity.notFound().build();
     }
   }
 

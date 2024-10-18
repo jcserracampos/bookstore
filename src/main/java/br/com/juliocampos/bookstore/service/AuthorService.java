@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.juliocampos.bookstore.exception.AuthorAlreadyExistsError;
 import br.com.juliocampos.bookstore.model.Author;
 import br.com.juliocampos.bookstore.repository.AuthorRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AuthorService {
@@ -35,6 +36,24 @@ public class AuthorService {
     }
 
     return authorRepository.save(author);
+  }
+
+  public Author update(Long id, Author authorUpdate) {
+    Optional<Author> existingAuthor = authorRepository.findById(id);
+
+    if (existingAuthor.isPresent()) {
+      Author author = existingAuthor.get();
+      author.setName(authorUpdate.getName());
+
+      if (authorUpdate.getBooks() != null) {
+        authorUpdate.getBooks().forEach(book -> book.setAuthor(author));
+        author.setBooks(authorUpdate.getBooks());
+      }
+
+      return authorRepository.save(author);
+    } else {
+      throw new EntityNotFoundException("Author not found"); // Lançar uma exceção se não encontrado
+    }
   }
 
   public void delete(Long id) {

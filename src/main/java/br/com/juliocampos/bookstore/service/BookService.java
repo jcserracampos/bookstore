@@ -11,6 +11,7 @@ import br.com.juliocampos.bookstore.exception.BookAlreadyExistsException;
 import br.com.juliocampos.bookstore.model.Author;
 import br.com.juliocampos.bookstore.model.Book;
 import br.com.juliocampos.bookstore.repository.BookRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class BookService {
@@ -62,6 +63,32 @@ public class BookService {
     }
 
     return bookRepository.save(book);
+  }
+
+  /**
+   * Update a book in the database
+   *
+   * @param bookUpdate
+   * @return Book
+   */
+  public Book update(Long id, Book bookUpdate) {
+    Optional<Book> existingBook = bookRepository.findById(id);
+    if (existingBook.isPresent()) {
+      Book book = existingBook.get();
+      book.setTitle(bookUpdate.getTitle());
+      book.setReleaseDate(bookUpdate.getReleaseDate());
+
+      // Atualiza o autor do livro (se um ID válido for enviado)
+      if (bookUpdate.getAuthor() != null && bookUpdate.getAuthor().getId() != null) {
+        Author author = authorService.findById(bookUpdate.getAuthor().getId())
+          .orElseThrow(() -> new EntityNotFoundException("Author not found")); // Lança exceção se não encontrado
+        book.setAuthor(author);
+      }
+
+      return bookRepository.save(book);
+    } else {
+      throw new EntityNotFoundException("Book not found"); // Lança exceção se não encontrado
+    }
   }
 
   /**
