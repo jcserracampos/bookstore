@@ -86,6 +86,42 @@ public class AuthorControllerTest {
     }
 
     @Test
+    public void whenSaveAuthorWithInvalidName_thenReturn400() throws Exception {
+        Author invalidAuthor = new Author();
+        invalidAuthor.setName(""); // Nome vazio, que deve ser inválido
+
+        mockMvc.perform(post("/api/authors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidAuthor)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.name").exists());
+    }
+
+    @Test
+    public void whenSaveAuthorWithNullName_thenReturn400() throws Exception {
+        Author invalidAuthor = new Author();
+        invalidAuthor.setName(null); // Nome nulo, que deve ser inválido
+
+        mockMvc.perform(post("/api/authors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidAuthor)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.name").exists());
+    }
+
+    @Test
+    public void whenSaveAuthorWithTooLongName_thenReturn400() throws Exception {
+        Author invalidAuthor = new Author();
+        invalidAuthor.setName("a".repeat(101)); // Nome com 101 caracteres, que deve ser inválido
+
+        mockMvc.perform(post("/api/authors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidAuthor)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.name").exists());
+    }
+
+    @Test
     public void whenUpdateAuthor_thenReturnUpdatedAuthor() throws Exception {
         when(authorService.update(eq(1L), any(Author.class))).thenReturn(testAuthor);
 
@@ -95,6 +131,18 @@ public class AuthorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(testAuthor.getId()))
                 .andExpect(jsonPath("$.name").value(testAuthor.getName()));
+    }
+
+    @Test
+    public void whenUpdateAuthorWithInvalidName_thenReturn400() throws Exception {
+        Author invalidAuthor = new Author();
+        invalidAuthor.setName(""); // Nome vazio, que deve ser inválido
+
+        mockMvc.perform(put("/api/authors/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidAuthor)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.name").exists());
     }
 
     @Test

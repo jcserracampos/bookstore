@@ -3,6 +3,8 @@ package br.com.juliocampos.bookstore.model;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Author {
@@ -11,6 +13,8 @@ public class Author {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotBlank(message = "O nome do autor não pode ser vazio")
+  @Size(min = 2, max = 100, message = "O nome do autor deve ter entre 2 e 100 caracteres")
   private String name;
 
   @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
