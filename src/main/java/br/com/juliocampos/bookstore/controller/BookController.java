@@ -30,8 +30,13 @@ public class BookController {
   }
 
   @PostMapping
-  public Book save(@RequestBody Book book) {
-    return bookService.save(book);
+  public ResponseEntity<?> save(@RequestBody Book book) {
+    try {
+      Book savedBook = bookService.save(book);
+      return ResponseEntity.ok(savedBook);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body("An error occurred: " + e.getMessage());
+    }
   }
 
   @DeleteMapping("/{id}")

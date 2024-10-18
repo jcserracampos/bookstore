@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.juliocampos.bookstore.exception.AuthorAlreadyExistsError;
 import br.com.juliocampos.bookstore.model.Author;
 import br.com.juliocampos.bookstore.repository.AuthorRepository;
 
@@ -24,6 +25,15 @@ public class AuthorService {
   }
 
   public Author save(Author author) {
+    Optional<Author> existingAuthor = authorRepository.findByName(author.getName());
+    if (existingAuthor.isPresent()) {
+      throw new AuthorAlreadyExistsError("Author with name " + author.getName() + " already exists");
+    }
+
+    if (author.getBooks() != null) {
+      author.getBooks().forEach(book -> book.setAuthor(author));
+    }
+
     return authorRepository.save(author);
   }
 

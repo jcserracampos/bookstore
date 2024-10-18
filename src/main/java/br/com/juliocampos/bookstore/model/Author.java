@@ -1,6 +1,5 @@
 package br.com.juliocampos.bookstore.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -14,8 +13,8 @@ public class Author {
 
   private String name;
 
-  @OneToMany(mappedBy = "author")
-  private List<Book> books = new ArrayList<>();
+  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private List<Book> books;
 
   // Getters and Setters
   public Long getId() {

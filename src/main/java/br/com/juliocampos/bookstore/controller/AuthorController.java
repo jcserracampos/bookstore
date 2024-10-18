@@ -30,8 +30,13 @@ public class AuthorController {
   }
 
   @PostMapping
-  public Author save(@RequestBody Author author) {
-    return authorService.save(author);
+  public ResponseEntity<?> save(@RequestBody Author author) {
+    try {
+      Author savedAuthor = authorService.save(author);
+      return ResponseEntity.ok(savedAuthor);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body("An error occurred: " + e.getMessage());
+    }
   }
 
   @DeleteMapping("/{id}")

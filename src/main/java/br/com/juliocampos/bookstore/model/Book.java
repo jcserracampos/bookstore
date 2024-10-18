@@ -2,11 +2,9 @@ package br.com.juliocampos.bookstore.model;
 
 import java.sql.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.*;
 
 @Entity
 public class Book {
@@ -19,6 +17,8 @@ public class Book {
   private Date releaseDate;
 
   @ManyToOne
+  @JoinColumn(name = "author_id")
+  @JsonIgnoreProperties("books")
   private Author author;
 
   // Getters and Setters
